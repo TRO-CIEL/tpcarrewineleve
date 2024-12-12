@@ -1,165 +1,139 @@
-// Nom du projet : Mes premiers programmes
-// Nom de l’auteur : Trompier Téo
-// Date de création : 03/12/2024
-// Résumé : Mes premiers prog fonctions
-#pragma once
+using namespace System;
+using namespace System::Drawing;
 
-#include "carre.h"
+/// <summary>
+/// Carré de couleur
+/// </summary>
+ref class CCarre
+{
+private:
+    int cote;
+    int sx;
+    int sy;
+    Color color;
+    int dx;
+    int dy;
 
-namespace tpcarrewineleve {
+public:
+    CCarre()
+    {
+        sx = 10;
+        sy = 10;
+        cote = 20;
+        color = Color::Red;
+        dx = 1;
+        dy = 1;
+    }
 
-	using namespace System;
-	using namespace System::ComponentModel;
-	using namespace System::Collections;
-	using namespace System::Windows::Forms;
-	using namespace System::Data;
-	using namespace System::Drawing;
+    /// <summary>
+    /// initialise m_x privé
+    /// </summary>
+    /// <param name="x">Position x du carré</param>
+    void Setsx(int x1)
+    {
+        sx = x1;
+    }
 
-	/// <summary>
-	/// Form1 est une fenêtre avec des carrés animés
-	/// </summary>
-	public ref class Form1 : public System::Windows::Forms::Form
-	{
-	public:
-		// Déclaration du tableau de carrés
-		array<CCarre^>^ tabCarre;
-		System::Random^ rand; // Instance pour générer des valeurs aléatoires
-		int nbcarre; // Nombre de carrés à animer
+    /// <summary>
+    /// retourne m_x privé
+    /// </summary>
+    /// <returns>Position x du carré</returns>
+    int Getsx()
+    {
+        return sx;
+    }
 
-		Form1(void)
-		{
-			InitializeComponent();
+    /// <summary>
+    /// initialise m_y privé
+    /// </summary>
+    /// <param name="y">Position y du carré</param>
+    void Setsy(int y1)
+    {
+        sy = y1;
 
-			// Initialisation du générateur de nombres aléatoires
-			rand = gcnew System::Random();
+    }
 
-			// Nombre de carrés à animer (par exemple 50)
-			nbcarre = 50;
+    /// <summary>
+    /// retourne m_y privé
+    /// </summary>
+    /// <returns>Position y du carré</returns>
+    int Getsy()
+    {
+        return sy;
+    }
 
-			// Crée le tableau pour stocker les carrés
-			tabCarre = gcnew array<CCarre^>(nbcarre);
+    /// <summary>
+    /// initialise m_color privé
+    /// </summary>
+    /// <param name="couleur">Couleur du carré</param>
+    void SetColor(Color couleur)
+    {
+        color = couleur;
+    }
 
-			// Initialisation des carrés avec des propriétés aléatoires
-			for (int i = 0; i < nbcarre; i++)
-			{
-				tabCarre[i] = gcnew CCarre();
+    /// <summary>
+    /// initialise m_cote privé
+    /// </summary>
+    /// <param name="cote">Coté du carré</param>
+    void SetCote(int cote)
+    {
+        this->cote = cote;
+    }
 
-				// Position aléatoire
-				tabCarre[i]->Setsx(rand->Next(this->ClientRectangle.Width));
-				tabCarre[i]->Setsy(rand->Next(this->ClientRectangle.Height));
+    /// <summary>
+    /// retourne m_cote privé
+    /// </summary>
+    /// <returns>Coté du carré</returns>
+    int GetCote()
+    {
+        return cote;
+    }
 
-				// Taille aléatoire
-				tabCarre[i]->SetCote(rand->Next(10, 51));
+    /// <summary>
+    /// Déplace le carré suivant un vecteur déplacement dx et dy
+    /// </summary>
+    /// <param name="dx">Valeur dx du déplacement</param>
+    /// <param name="dy">Valeur dy du déplacement</param>
+    void Deplacer(int dx, int dy)
+    {
+        sx += dx; // Incrémente la position X
+        sy += dy; // Incrémente la position Y
+    }
 
-				// Couleur aléatoire
-				int colorChoice = rand->Next(0, 3);
-				switch (colorChoice)
-				{
-				case 0: tabCarre[i]->SetColor(Color::Red); break;
-				case 1: tabCarre[i]->SetColor(Color::Green); break;
-				case 2: tabCarre[i]->SetColor(Color::Blue); break;
-				}
-			}
+    void Animer(System::Windows::Forms::Form^ form) {
+        Effacer(form);
 
-			this->timer1->Enabled = true;
+        Deplacer(dx, dy);
 
-			// Start le timer pour l'animation
-			timer1->Start();
-		}
+        // Si le carré atteint le bord droit ou gauche, on inverse la direction du mouvement
+        if (sx < 0 || sx + cote > form->ClientRectangle.Width) {
+            dx = -dx;
+        }
+        // Si le carré atteint le bord haut ou bas, on inverse la direction du mouvement
+        if (sy < 0 || sy + cote > form->ClientRectangle.Height) {
+            dy = -dy;
+        }
 
-	protected:
-		/// <summary>
-		/// Nettoyage des ressources utilisées.
-		/// </summary>
-		~Form1()
-		{
-			if (components)
-			{
-				delete components;
-			}
-		}
+        Dessiner(form);
+    }
 
-	private: System::Windows::Forms::Timer^ timer1;
-	private: System::ComponentModel::IContainer^ components;
+    /// <summary>
+    /// Dessine le carré 
+    /// </summary>
+    /// <param name="form">pointeur sur la fenêtre dans laquelle on dessine.</param>
+    void Dessiner(System::Windows::Forms::Form^ form)
+    {
+        Graphics^ g = form->CreateGraphics();
+        g->FillRectangle(gcnew SolidBrush(color), sx, sy, cote, cote);
+    }
 
-	private:
-		/// <summary>
-		/// Largeur de la fenêtre
-		/// </summary>
-		int largeur;
-		/// <summary>
-		/// Hauteur de la fenêtre
-		/// </summary>
-		int hauteur;
-
-#pragma region Windows Form Designer generated code
-		/// <summary>
-		/// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
-		/// le contenu de cette méthode avec l'éditeur de code.
-		/// </summary>
-		void InitializeComponent(void)
-		{
-			this->components = (gcnew System::ComponentModel::Container());
-			this->timer1 = (gcnew System::Windows::Forms::Timer(this->components));
-			this->SuspendLayout();
-			// 
-			// timer1
-			// 
-			this->timer1->Interval = 25;
-			this->timer1->Tick += gcnew System::EventHandler(this, &Form1::timer1_Tick);
-			// 
-			// Form1
-			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
-			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(284, 262);
-			this->Name = L"Form1";
-			this->Text = L"Form1";
-			this->ResumeLayout(false);
-		}
-#pragma endregion
-
-	private: System::Void Form1_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e)
-	{
-		for (int i = 0; i < nbcarre; i++)
-		{
-			switch (e->KeyCode)
-			{
-			case Keys::Up:
-				tabCarre[i]->Deplacer(0, -5);
-				break;
-			case Keys::Down:
-				tabCarre[i]->Deplacer(0, 5);
-				break;
-			case Keys::Left:
-				tabCarre[i]->Deplacer(-5, 0);
-				break;
-			case Keys::Right:
-				tabCarre[i]->Deplacer(5, 0);
-				break;
-			}
-		}
-
-		// Redessiner la fenêtre après le déplacement
-		this->Invalidate();
-	}
-
-		/// <summary>
-		/// Appelé périodiquement pour redessiner les carrés dans la fenêtre
-		/// </summary>
-	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
-		// Effacer et animer chaque carré du tableau
-		// for (int i = 0; i < nbcarre; i++)
-		// {
-			// Efface le carré à sa position actuelle
-			// tabCarre[i]->Effacer(this);
-
-			// Anime chaque carré
-			// tabCarre[i]->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
-
-			// Dessine le carré à sa nouvelle position
-			//tabCarre[i]->Dessiner(this);
-		// }
-	}
-	};
-}
+    /// <summary>
+    /// Efface le carré 
+    /// </summary>
+    /// <param name="form">pointeur sur la fenêtre dans laquelle on dessine.</param>
+    void Effacer(System::Windows::Forms::Form^ form)
+    {
+        Graphics^ g = form->CreateGraphics();
+        g->FillRectangle(gcnew SolidBrush(form->BackColor), sx, sy, cote, cote);
+    }
+};
