@@ -16,34 +16,54 @@ namespace tpcarrewineleve {
 	using namespace System::Drawing;
 
 	/// <summary>
-	/// Form1 est une fenêtre avec un carré rouge
+	/// Form1 est une fenêtre avec des carrés animés
 	/// </summary>
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
 	public:
-		CCarre^ pcarre2;
+		// Déclaration du tableau de carrés
+		array<CCarre^>^ tabCarre;
+		System::Random^ rand; // Instance pour générer des valeurs aléatoires
+		int nbcarre; // Nombre de carrés à animer
+
 		Form1(void)
 		{
 			InitializeComponent();
-			//
-			// Instanciation dans le tas managé du carré numéro 1 
-			pcarre1 = gcnew CCarre();
-			pcarre1->SetColor(Color::Red);
-			pcarre2 = gcnew CCarre();
-			pcarre2->Setsx(100);
-			pcarre2->Setsy(100);
-			pcarre2->SetCote(30);
-			pcarre2->SetColor(Color::Blue);
 
-			// Modifier les attributs sx, sy et cote
-			pcarre1->Setsx(100);   // Position en X
-			pcarre1->Setsy(150);   // Position en Y
-			pcarre1->SetCote(50);  // Taille du carré (longueur du côté)
+			// Initialisation du générateur de nombres aléatoires
+			rand = gcnew System::Random();
+
+			// Nombre de carrés à animer (par exemple 50)
+			nbcarre = 50;
+
+			// Crée le tableau pour stocker les carrés
+			tabCarre = gcnew array<CCarre^>(nbcarre);
+
+			// Initialisation des carrés avec des propriétés aléatoires
+			for (int i = 0; i < nbcarre; i++)
+			{
+				tabCarre[i] = gcnew CCarre();
+
+				// Position aléatoire
+				tabCarre[i]->Setsx(rand->Next(this->ClientRectangle.Width));
+				tabCarre[i]->Setsy(rand->Next(this->ClientRectangle.Height));
+
+				// Taille aléatoire
+				tabCarre[i]->SetCote(rand->Next(10, 51));
+
+				// Couleur aléatoire
+				int colorChoice = rand->Next(0, 3);
+				switch (colorChoice)
+				{
+				case 0: tabCarre[i]->SetColor(Color::Red); break;
+				case 1: tabCarre[i]->SetColor(Color::Green); break;
+				case 2: tabCarre[i]->SetColor(Color::Blue); break;
+				}
+			}
 
 			this->timer1->Enabled = true;
-			largeur = this->ClientRectangle.Width;
-			hauteur = this->ClientRectangle.Height;
 
+			// Start le timer pour l'animation
 			timer1->Start();
 		}
 
@@ -58,15 +78,11 @@ namespace tpcarrewineleve {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Timer^ timer1;
 
+	private: System::Windows::Forms::Timer^ timer1;
 	private: System::ComponentModel::IContainer^ components;
 
 	private:
-		/// <summary>
-		/// Le Carré numéro 1.
-		/// </summary>
-		CCarre^ pcarre1;
 		/// <summary>
 		/// Largeur de la fenêtre
 		/// </summary>
@@ -75,8 +91,6 @@ namespace tpcarrewineleve {
 		/// Hauteur de la fenêtre
 		/// </summary>
 		int hauteur;
-
-
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -102,7 +116,6 @@ namespace tpcarrewineleve {
 			this->Name = L"Form1";
 			this->Text = L"Form1";
 			this->ResumeLayout(false);
-
 		}
 #pragma endregion
 
@@ -110,22 +123,18 @@ namespace tpcarrewineleve {
 		/// Appelé périodiquement pour redessiner les carrés dans la fenêtre
 		/// </summary>
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
-		// Efface le carré à sa position actuelle
-		pcarre1->Effacer(this);
+		// Effacer et animer chaque carré du tableau
+		for (int i = 0; i < nbcarre; i++)
+		{
+			// Efface le carré à sa position actuelle
+			tabCarre[i]->Effacer(this);
 
-		// Déplace le carré vers le bas (ajout de 5 pixels en Y)
-		pcarre1->Deplacer(0, 5); // dx = 0 (pas de déplacement horizontal), dy = 5 (descente)
+			// Anime chaque carré
+			tabCarre[i]->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
 
-		// Dessine le carré à sa nouvelle position
-		pcarre1->Dessiner(this);
-
-		// Si le carré dépasse la hauteur de la fenêtre, le repositionner en haut
-		if (pcarre1->Getsy() + pcarre1->GetCote() > this->ClientRectangle.Height) {
-			pcarre1->Setsy(0); // Repositionne en haut
+			// Dessine le carré à sa nouvelle position
+			tabCarre[i]->Dessiner(this);
 		}
-
-		pcarre1->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
-		pcarre2->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
 	}
 	};
 }
