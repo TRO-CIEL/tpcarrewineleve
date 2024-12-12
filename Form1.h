@@ -21,6 +21,7 @@ namespace tpcarrewineleve {
 	public ref class Form1 : public System::Windows::Forms::Form
 	{
 	public:
+		CCarre^ pcarre2;
 		Form1(void)
 		{
 			InitializeComponent();
@@ -28,6 +29,11 @@ namespace tpcarrewineleve {
 			// Instanciation dans le tas managé du carré numéro 1 
 			pcarre1 = gcnew CCarre();
 			pcarre1->SetColor(Color::Red);
+			pcarre2 = gcnew CCarre();
+			pcarre2->Setsx(100);
+			pcarre2->Setsy(100);
+			pcarre2->SetCote(30);
+			pcarre2->SetColor(Color::Blue);
 
 			// Modifier les attributs sx, sy et cote
 			pcarre1->Setsx(100);   // Position en X
@@ -37,6 +43,8 @@ namespace tpcarrewineleve {
 			this->timer1->Enabled = true;
 			largeur = this->ClientRectangle.Width;
 			hauteur = this->ClientRectangle.Height;
+
+			timer1->Start();
 		}
 
 	protected:
@@ -117,6 +125,7 @@ namespace tpcarrewineleve {
 		}
 
 		pcarre1->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
+		pcarre2->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
 	}
 	};
 }
