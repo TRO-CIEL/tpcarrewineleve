@@ -116,7 +116,7 @@ namespace tpcarrewineleve {
 			pcarre1->Setsy(0); // Repositionne en haut
 		}
 
-		pcarre1->Animer(this); // Animation du carré
+		pcarre1->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
 	}
 	};
 }
