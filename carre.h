@@ -17,6 +17,8 @@ ref class CCarre
 			int sx;
 			int sy;
 			Color color;
+			int dx;
+			int dy;
 		
 		public :
 			CCarre()
@@ -25,6 +27,8 @@ ref class CCarre
 				sy = 10;
 				cote = 20;
 				color = Color::Red;
+				dx = 1;
+				dy = 1;
 			}
 
 			/// <summary>
@@ -101,6 +105,21 @@ ref class CCarre
 			{
 				sx += dx; // Incrémente la position X
 				sy += dy; // Incrémente la position Y
+			}
+
+			void Animer(System::Windows::Forms::Form^ form) {
+				Effacer(form);
+
+				Deplacer(dx, dy);
+
+				if (sx < 0 || sx + cote > form->ClientRectangle.Width) {
+					dx = -dx;
+				}
+				if (sy < 0 || sy + cote > form->ClientRectangle.Height) {
+					dy = -dy;
+				}
+
+				Dessiner(form);
 			}
 
 			/// <summary>
