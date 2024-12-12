@@ -25,21 +25,18 @@ namespace tpcarrewineleve {
 		{
 			InitializeComponent();
 			//
-			//TODO: ajoutez ici le code du constructeur
-			//
-			// instanciation dans le tas managé du carré numéro 1 
+			// Instanciation dans le tas managé du carré numéro 1 
 			pcarre1 = gcnew CCarre();
 			pcarre1->SetColor(Color::Red);
-			
-			
-			// A COMPLETER /////////////////////////////////////////////////////////////////////////////////
 
-
+			// Modifier les attributs sx, sy et cote
+			pcarre1->Setsx(100);   // Position en X
+			pcarre1->Setsy(150);   // Position en Y
+			pcarre1->SetCote(50);  // Taille du carré (longueur du côté)
 
 			this->timer1->Enabled = true;
 			largeur = this->ClientRectangle.Width;
 			hauteur = this->ClientRectangle.Height;
-
 		}
 
 	protected:
@@ -113,4 +110,3 @@ namespace tpcarrewineleve {
 			 }
 	};
 }
-
