@@ -50,15 +50,15 @@ namespace tpcarrewineleve {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Timer^  timer1;
-	
-	private: System::ComponentModel::IContainer^  components;
+	private: System::Windows::Forms::Timer^ timer1;
+
+	private: System::ComponentModel::IContainer^ components;
 
 	private:
 		/// <summary>
 		/// Le Carré numéro 1.
 		/// </summary>
-		CCarre ^pcarre1;
+		CCarre^ pcarre1;
 		/// <summary>
 		/// Largeur de la fenêtre
 		/// </summary>
@@ -99,14 +99,22 @@ namespace tpcarrewineleve {
 #pragma endregion
 
 		/// <summary>
-		/// Appelé périodiquement pour redessiner les carrés dans la fenetre
+		/// Appelé périodiquement pour redessiner les carrés dans la fenêtre
 		/// </summary>
-	private: System::Void timer1_Tick(System::Object^  sender, System::EventArgs^  e) {
-				// A COMPLETER ////////////////////////////////////////////////////////////////////////
-				pcarre1->Dessiner(this);
-				//		 pcarre1->Effacer(this);
-				 
-			 
-			 }
+	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
+		// Efface le carré à sa position actuelle
+		pcarre1->Effacer(this);
+
+		// Déplace le carré vers le bas (ajout de 5 pixels en Y)
+		pcarre1->Deplacer(0, 5); // dx = 0 (pas de déplacement horizontal), dy = 5 (descente)
+
+		// Dessine le carré à sa nouvelle position
+		pcarre1->Dessiner(this);
+
+		// Si le carré dépasse la hauteur de la fenêtre, le repositionner en haut
+		if (pcarre1->Getsy() + pcarre1->GetCote() > this->ClientRectangle.Height) {
+			pcarre1->Setsy(0); // Repositionne en haut
+		}
+	}
 	};
 }
