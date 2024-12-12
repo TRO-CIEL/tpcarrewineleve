@@ -119,22 +119,47 @@ namespace tpcarrewineleve {
 		}
 #pragma endregion
 
+	private: System::Void Form1_KeyDown(System::Object^ sender, System::Windows::Forms::KeyEventArgs^ e)
+	{
+		for (int i = 0; i < nbcarre; i++)
+		{
+			switch (e->KeyCode)
+			{
+			case Keys::Up:
+				tabCarre[i]->Deplacer(0, -5);
+				break;
+			case Keys::Down:
+				tabCarre[i]->Deplacer(0, 5);
+				break;
+			case Keys::Left:
+				tabCarre[i]->Deplacer(-5, 0);
+				break;
+			case Keys::Right:
+				tabCarre[i]->Deplacer(5, 0);
+				break;
+			}
+		}
+
+		// Redessiner la fenêtre après le déplacement
+		this->Invalidate();
+	}
+
 		/// <summary>
 		/// Appelé périodiquement pour redessiner les carrés dans la fenêtre
 		/// </summary>
 	private: System::Void timer1_Tick(System::Object^ sender, System::EventArgs^ e) {
 		// Effacer et animer chaque carré du tableau
-		for (int i = 0; i < nbcarre; i++)
-		{
+		// for (int i = 0; i < nbcarre; i++)
+		// {
 			// Efface le carré à sa position actuelle
-			tabCarre[i]->Effacer(this);
+			// tabCarre[i]->Effacer(this);
 
 			// Anime chaque carré
-			tabCarre[i]->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
+			// tabCarre[i]->Animer(this, this->ClientRectangle.Width, this->ClientRectangle.Height);
 
 			// Dessine le carré à sa nouvelle position
-			tabCarre[i]->Dessiner(this);
-		}
+			//tabCarre[i]->Dessiner(this);
+		// }
 	}
 	};
 }

@@ -107,22 +107,18 @@ ref class CCarre
 				sy += dy; // Incrémente la position Y
 			}
 
-			void Animer(System::Windows::Forms::Form^ form, int largeur, int hauteur) {
-				// Efface le carré à la position actuelle
+			void Animer(System::Windows::Forms::Form^ form) {
 				Effacer(form);
 
-				// Déplace le carré en fonction de dx et dy
 				Deplacer(dx, dy);
 
-				// Vérifie les collisions avec les bords de la fenêtre
-				if (sx < 0 || sx + cote > largeur) {
-					dx = -dx; // Inverse la direction horizontale si le carré touche un bord
+				if (sx < 0 || sx + cote > form->ClientRectangle.Width) {
+					dx = -dx;
 				}
-				if (sy < 0 || sy + cote > hauteur) {
-					dy = -dy; // Inverse la direction verticale si le carré touche un bord
+				if (sy < 0 || sy + cote > form->ClientRectangle.Height) {
+					dy = -dy;
 				}
 
-				// Dessine le carré à la nouvelle position
 				Dessiner(form);
 			}
 
